@@ -7,16 +7,16 @@ interface FormatSelectorProps {
   onChange: (format: OutputFormat) => void
 }
 
-const FORMATS: { value: OutputFormat; label: string }[] = [
-  { value: 'jpeg', label: 'JPEG' },
-  { value: 'webp', label: 'WebP' },
-  { value: 'png',  label: 'PNG'  },
+const FORMATS: { value: OutputFormat; label: string; hint: string }[] = [
+  { value: 'jpeg', label: 'JPEG', hint: 'Smallest size' },
+  { value: 'webp', label: 'WebP', hint: 'Modern & efficient' },
+  { value: 'png',  label: 'PNG',  hint: 'Lossless' },
 ]
 
 export default function FormatSelector({ value, onChange }: FormatSelectorProps) {
   return (
     <div className="flex items-center gap-3">
-      <span className="text-sm font-medium text-gray-600 w-14 shrink-0">Format</span>
+      <span className="text-sm font-medium text-gray-500 w-16 shrink-0">Format</span>
       <div className="flex gap-1.5" role="radiogroup" aria-label="Output format">
         {FORMATS.map((f) => (
           <button
@@ -24,17 +24,23 @@ export default function FormatSelector({ value, onChange }: FormatSelectorProps)
             role="radio"
             aria-checked={value === f.value}
             onClick={() => onChange(f.value)}
+            title={f.hint}
             className={
-              'px-3.5 py-1.5 text-sm font-medium rounded-lg transition-colors ' +
+              'relative px-3.5 py-1.5 text-sm font-medium rounded-lg transition-all duration-150 ' +
               (value === f.value
-                ? 'bg-gray-900 text-white'
-                : 'bg-white border border-gray-200 text-gray-600 hover:border-gray-400')
+                ? 'bg-gray-900 text-white shadow-sm'
+                : 'bg-gray-50 border border-gray-200 text-gray-600 hover:border-gray-400 hover:bg-white')
             }
           >
             {f.label}
           </button>
         ))}
       </div>
+      {value && (
+        <span className="text-xs text-gray-400 hidden sm:block">
+          {FORMATS.find((f) => f.value === value)?.hint}
+        </span>
+      )}
     </div>
   )
 }
