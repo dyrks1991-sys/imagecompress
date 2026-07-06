@@ -188,8 +188,8 @@
 
 | ID | Task | Est | Deps | Status |
 |---|---|---|---|---|
-| `E9-T1` | GitHub + Vercel deploy | 0.5h | E8-T2, E8-T3 | pending |
-| `E9-T2` | Production smoke test | 0.5h | E9-T1 | pending |
+| `E9-T1` | GitHub + Vercel deploy | 0.5h | E8-T2, E8-T3 | done |
+| `E9-T2` | Production smoke test | 0.5h | E9-T1 | done |
 
 ### E9-T1 — GitHub + Vercel deploy
 
