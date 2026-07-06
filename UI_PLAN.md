@@ -1,0 +1,151 @@
+# UI Plan — ImageCompress
+
+> Version: 0.1.0
+> Date: 2026-07-06
+
+---
+
+## Pages
+
+| Path | Name | Description |
+|---|---|---|
+| `/` | Home | The entire product — single-page tool. No other routes needed. |
+
+---
+
+## Navigation Flow
+
+Single-page tool. No navigation required.
+
+```
+/ (Home)
+  ├── Empty state: DropZone CTA visible
+  └── File selected: controls + preview + download appear
+```
+
+---
+
+## Wireframe
+
+
+MOBILE (< 768px):
+┌─────────────────────┐
+│  ImageCompress  🗜️  │  ← header (fixed, 48px)
+├─────────────────────┤
+│                     │
+│   ┌─────────────┐   │
+│   │   Drop      │   │  DropZone (full width, 180px)
+│   │   image     │   │
+│   │   here      │   │
+│   └─────────────┘   │
+│                     │
+│  Format:            │
+│  ⦿ JPEG  ○ WebP  ○ PNG │  FormatSelector (row)
+│                     │
+│  Quality: 80%       │
+│  ──────●──────────  │  QualitySlider
+│                     │
+│  Before      After  │
+│  ┌──────┐  ┌──────┐ │  ImagePreview (2-col, 160px each)
+│  │ img  │  │ img  │ │
+│  │128KB │  │ 38KB │ │
+│  └──────┘  └──────┘ │
+│                     │
+│  128 KB → 38 KB     │  CompressionStats
+│  70% smaller  ✓     │
+│                     │
+│  ┌─────────────────┐│
+│  │   Download      ││  DownloadButton (full width)
+│  └─────────────────┘│
+└─────────────────────┘
+
+DESKTOP (≥ 768px):
+┌───────────────────────────────────────────────┐
+│  ImageCompress         Free · Private · Fast  │  header
+├───────────────────────────────────────────────┤
+│                                               │
+│          ┌──────────────────────┐             │
+│          │   Drop image here    │             │  DropZone (centered, max-w-lg)
+│          │   or click to upload │             │
+│          └──────────────────────┘             │
+│                                               │
+│   Format: ⦿ JPEG  ○ WebP  ○ PNG              │  FormatSelector (inline)
+│   Quality: ──────────────●── 80%             │  QualitySlider
+│                                               │
+│   ┌──────────────────┐  ┌──────────────────┐ │
+│   │     BEFORE       │  │      AFTER       │ │  ImagePreview (2-col equal)
+│   │                  │  │                  │ │
+│   │    [image]       │  │    [image]       │ │
+│   │                  │  │                  │ │
+│   │  1200×800  128KB │  │  1200×800   38KB │ │
+│   └──────────────────┘  └──────────────────┘ │
+│                                               │
+│         128 KB → 38 KB  (70% smaller)        │  CompressionStats (centered)
+│                                               │
+│              [ Download ]                     │  DownloadButton (centered)
+│                                               │
+└───────────────────────────────────────────────┘
+
+---
+
+## Component Hierarchy
+
+```
+page.tsx
+├── <header>
+│     Logo + tagline
+├── <main>
+│   ├── DropZone
+│   └── [when file selected]
+│         ├── FormatSelector
+│         ├── QualitySlider
+│         ├── ImagePreview
+│         │     ├── BeforePane (original)
+│         │     └── AfterPane  (compressed)
+│         ├── CompressionStats
+│         └── DownloadButton
+└── <footer>
+      Privacy note
+```
+
+---
+
+## Responsive Strategy
+
+| Breakpoint | Layout |
+|---|---|
+| Mobile (< 768px) | Single column. DropZone full-width. Preview stacked vertically. |
+| Tablet (768px–1023px) | Single column, wider previews. |
+| Desktop (≥ 1024px) | Two-column preview side by side. Controls centered, max-w-lg. |
+
+**Implementation:** Tailwind `md:` and `lg:` prefixes only. No media query JS.
+
+---
+
+## Design Tokens
+
+| Token | Value | Usage |
+|---|---|---|
+| Primary action | `bg-gray-900 text-white` | Download button |
+| Secondary action | `border border-gray-200` | Format selector |
+| Error state | `text-red-500` | Negative savings, errors |
+| Success state | `text-green-600` | Positive savings |
+| Surface | `bg-gray-50` | Page background |
+| Card | `bg-white border border-gray-200 rounded-xl shadow-sm` | Preview panels |
+
+---
+
+## Interaction Design
+
+| Interaction | Behavior |
+|---|---|
+| Drag file over DropZone | Border turns blue, background tints |
+| Drop file | Compression starts immediately (debounced 300ms) |
+| Move quality slider | Recompresses after 300ms debounce |
+| Change format | Recompresses immediately |
+| Click Download | File downloads, button shows "Downloading..." briefly |
+| Drop new file | Resets all state, restarts flow |
+
+---
+
+*Generated by DevOS Planner Agent v1 — 2026-07-06*
